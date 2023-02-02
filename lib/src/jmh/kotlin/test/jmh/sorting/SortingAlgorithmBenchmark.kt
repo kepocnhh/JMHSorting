@@ -21,12 +21,12 @@ import kotlin.math.absoluteValue
 @Measurement(iterations = 1, time = 1)
 @Warmup(iterations = 0)
 @State(Scope.Benchmark)
-internal open class BubbleSortBenchmark {
+internal open class SortingAlgorithmBenchmark {
     companion object {
         private const val SALT = "e43f98c5-9923-4cd3-b441-c1e812cf6604"
     }
 
-    @Param(value = ["2048", "4096", "8192", "16384", "32768", "65536"])
+    @Param(value = ["4096", "16384", "65536"])
     var size: Int = 0
 
     private var list = listOf<Int>()
@@ -45,5 +45,10 @@ internal open class BubbleSortBenchmark {
     @Benchmark
     fun sortByBubble() {
         BubbleSort.sort(list)
+    }
+
+    @Benchmark
+    fun sortByBubbleEx() {
+        BubbleExSort.sort(list)
     }
 }
