@@ -14,15 +14,15 @@ import org.openjdk.jmh.annotations.State
 import org.openjdk.jmh.annotations.Warmup
 import java.util.concurrent.TimeUnit
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Fork(value = 1, warmups = 0)
-@Measurement(iterations = 1, time = 1)
-@Warmup(iterations = 0)
+//@BenchmarkMode(Mode.AverageTime)
+//@OutputTimeUnit(TimeUnit.MILLISECONDS)
+//@Fork(value = 1, warmups = 0)
+//@Measurement(iterations = 1, time = 1)
+//@Warmup(iterations = 0)
 @State(Scope.Benchmark)
 internal open class SortingBubbleBenchmark {
-//    @Param(value = ["4096"])
-    @Param(value = ["16384"])
+    @Param(value = ["4096"])
+//    @Param(value = ["16384"])
 //    @Param(value = ["4096", "16384", "65536"])
     var size: Int = 0
 

@@ -1,3 +1,6 @@
+import java.time.Duration
+import java.time.temporal.ChronoUnit
+
 repositories.mavenCentral()
 
 version = Version.lib
@@ -52,13 +55,37 @@ project.kotlin.target.compilations.getByName("jmh") {
         source(outputSourceDir)
         destinationDirectory.set(outputClassesDir)
     }
-    task<JavaExec>("runBenchmark") {
-        dependsOn(compileGeneratedTask)
-        mainClass.set("org.openjdk.jmh.Main")
-        classpath(
-            sourceSets[issuer].runtimeClasspath,
-            outputResourceDir,
-            outputClassesDir
-        )
+    mapOf(
+        "runBenchmark" to 1,
+        "runBenchmarkMultiThread" to Runtime.getRuntime().availableProcessors(),
+    ).forEach { (taskName, threads) ->
+        task<JavaExec>(taskName) {
+            dependsOn(compileGeneratedTask)
+            doFirst {
+                File(buildDir, "reports/jmh").mkdirs()
+            }
+            mainClass.set("org.openjdk.jmh.Main")
+            classpath(
+                sourceSets[issuer].runtimeClasspath,
+                outputResourceDir,
+                outputClassesDir
+            )
+            val args = JMHArgs(
+                timeout = Duration.of(10, ChronoUnit.SECONDS),
+                forks = 1,
+                iterations = 1,
+                time = Duration.of(1, ChronoUnit.SECONDS),
+                warmup = JMHArgs.Warmup(
+                    forks = 1,
+                    iterations = 1,
+                    time = Duration.of(1, ChronoUnit.SECONDS)
+                ),
+                mode = BenchmarkMode.AverageTime,
+                timeUnit = JMHArgs.TimeUnit.ms,
+                threads = threads,
+//                output = File(buildDir, "reports/jmh/result.txt")
+            )
+            args(args.toArgs())
+        }
     }
 }
