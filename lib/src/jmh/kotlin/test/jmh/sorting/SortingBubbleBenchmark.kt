@@ -6,10 +6,11 @@ import org.openjdk.jmh.annotations.Param
 import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.Setup
 import org.openjdk.jmh.annotations.State
+import org.openjdk.jmh.infra.Blackhole
 
 @State(Scope.Benchmark)
 internal open class SortingBubbleBenchmark {
-    @Param(value = ["10000", "20000", "40000"])
+    @Param(value = ["8000", "16000", "32000"])
     var size: Int = 0
 
     private lateinit var lists: Lists<Int>
@@ -20,27 +21,32 @@ internal open class SortingBubbleBenchmark {
     }
 
     @Benchmark
-    fun sortShuffledByBubble() {
-        BubbleSort.sort(lists.shuffled)
+    fun sortShuffledByBubble(hole: Blackhole) {
+        val result = BubbleSort.sort(lists.shuffled)
+        hole.consume(result)
     }
 
     @Benchmark
-    fun sortSortedByBubble() {
-        BubbleSort.sort(lists.sorted)
+    fun sortSortedByBubble(hole: Blackhole) {
+        val result = BubbleSort.sort(lists.sorted)
+        hole.consume(result)
     }
 
     @Benchmark
-    fun sortSortedHalfByBubble() {
-        BubbleSort.sort(lists.sortedHalf)
+    fun sortSortedHalfByBubble(hole: Blackhole) {
+        val result = BubbleSort.sort(lists.sortedHalf)
+        hole.consume(result)
     }
 
     @Benchmark
-    fun sortReversedByBubble() {
-        BubbleSort.sort(lists.reversed)
+    fun sortReversedByBubble(hole: Blackhole) {
+        val result = BubbleSort.sort(lists.reversed)
+        hole.consume(result)
     }
 
     @Benchmark
-    fun sortEquivalentsByBubble() {
-        BubbleSort.sort(lists.equivalents)
+    fun sortEquivalentsByBubble(hole: Blackhole) {
+        val result = BubbleSort.sort(lists.equivalents)
+        hole.consume(result)
     }
 }

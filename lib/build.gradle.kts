@@ -57,7 +57,8 @@ project.kotlin.target.compilations.getByName("jmh") {
     }
     mapOf(
         "runBenchmark" to 1,
-        "runBenchmarkMultiThread" to Runtime.getRuntime().availableProcessors(),
+//        "runBenchmarkMultiThread" to Runtime.getRuntime().availableProcessors(),
+        "runBenchmarkMultiThread" to Int.MAX_VALUE,
     ).forEach { (taskName, threads) ->
         task<JavaExec>(taskName) {
             dependsOn(compileGeneratedTask)

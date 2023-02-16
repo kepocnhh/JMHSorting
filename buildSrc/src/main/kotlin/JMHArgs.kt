@@ -110,12 +110,17 @@ class JMHArgs(
             "-wi=${warmup.iterations}",
             "-w=${warmup.time.toMillis()}ms",
             "-wf=${warmup.forks}",
-            "-bm=${mode.name}",
-            "-t=${threads}",
+            "-bm=${mode.name}"
         ).also {
             if (output != NO_FILE) {
                 if (output.isDirectory) error("Outpur is directory!")
                 it.add("-o=${output.absolutePath}")
+            }
+            if (threads < 1) error("Error threads!")
+            if (threads == Int.MAX_VALUE) {
+                it.add("-t=max")
+            } else {
+                it.add("-t=${threads}")
             }
         }
     }
